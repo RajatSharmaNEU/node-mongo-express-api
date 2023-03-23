@@ -79,8 +79,9 @@ module.exports = function (app) {
 
     // Edit User
     app.put('/user/edit', async (req, res) => {
-        const {name, email, password} = req.body;
-
+        const {name, password} = req.body;
+        const email = req.query.email;
+        
         // All three fields is mandatory
         if (!email) {
             return res.status(400).send({
@@ -98,7 +99,7 @@ module.exports = function (app) {
             });
         }
 
-        const existingUser = await User.findOne({email});
+        const existingUser = await User.findOne({email: email});
         if (!existingUser) {
             return res.status(404).send({
                 message: "User not found.",
