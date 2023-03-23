@@ -14,17 +14,17 @@ module.exports = function (app) {
 
         // All three fields is mandatory
         if (!email) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter email.",
             });
         }
         if (!password) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter password.",
             });
         }
         if (!name) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter name.",
             });
         }
@@ -37,17 +37,17 @@ module.exports = function (app) {
         }
 
         if (!name.match(regUserName)) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Invalid name, please enter alphabetic first & last name, separate by space only.",
             });
         }
         if (!password.match(regPassword)) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Password must have 8 characters with at least a symbol, upper and lower case letters and a number",
             });
         }
         if (!email.match(regEmail)) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter a proper email.",
             });
         }
@@ -68,7 +68,7 @@ module.exports = function (app) {
             })
             newUser.save().then(() => {
                 res.send({
-                    status: 200,
+                    status: 201,
                     message: "User created successfully.",
                 })
             })
@@ -83,17 +83,17 @@ module.exports = function (app) {
 
         // All three fields is mandatory
         if (!email) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter email.",
             });
         }
         if (!password) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter password.",
             });
         }
         if (!name) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter name.",
             });
         }
@@ -106,17 +106,17 @@ module.exports = function (app) {
         }
 
         if (!name.match(regUserName)) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Invalid name, please enter alphabetic first & last name, separate by space only.",
             });
         }
         if (!password.match(regPassword)) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Password must have 8 characters with at least a symbol, upper and lower case letters and a number.",
             });
         }
         if (!email.match(regEmail)) {
-            return res.status(403).send({
+            return res.status(400).send({
                 message: "Please enter a proper email.",
             });
         }
@@ -149,7 +149,7 @@ module.exports = function (app) {
                 message: "User not found.",
             });
         } else {
-            return res.send({
+            return res.status(200).send({
                 message: "User Deleted Successfully!",
                 user: existingUser
             });
@@ -159,6 +159,10 @@ module.exports = function (app) {
     // Get All User
     app.get('/user/getAll', async (req, res) => {
         const users = await User.find();
-        res.status(404).send(users);
+        if(users.length === 0) {
+            res.status(204).send(users);
+        } else {
+            res.status(200).send(users);
+        }
     });
 };
